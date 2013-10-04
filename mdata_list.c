@@ -26,23 +26,23 @@ typedef enum mdata_exit_codes {
 	MDEC_TRY_AGAIN = 10
 } mdata_exit_codes_t;
 
-void
+static int
 print_response(mdata_response_t mdr, string_t *data)
 {
 	switch (mdr) {
 	case MDR_SUCCESS:
 		fprintf(stdout, "%s\n", dynstr_cstr(data));
-		break;
+		return (MDEC_SUCCESS);
 	case MDR_NOTFOUND:
 		fprintf(stderr, "No metadata\n");
-		break;
+		return (MDEC_NOTFOUND);
 	case MDR_UNKNOWN:
 		fprintf(stderr, "Error getting metadata: %s\n",
 		    dynstr_cstr(data));
-		break;
+		return (MDEC_ERROR);
 	default:
-		fprintf(stderr, "print_response: UNKNOWN RESPONSE\n");
-		abort();
+		ABORT("print_response: UNKNOWN RESPONSE\n");
+		return (MDEC_ERROR);
 	}
 }
 
@@ -65,7 +65,5 @@ main(int argc __UNUSED, char **argv __UNUSED)
 		return (MDEC_ERROR);
 	}
 
-	print_response(mdr, data);
-
-	return (MDEC_SUCCESS);
+	return (print_response(mdr, data));
 }

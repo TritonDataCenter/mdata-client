@@ -14,6 +14,8 @@ extern "C" {
 #define	VERIFY(EX)	((void)((EX) || print_and_abort("EX", __FILE__,__LINE__)))
 #define	VERIFY0(EX)	((void)((EX) && print_and_abort("EX", __FILE__, __LINE__)))
 
+#define	ABORT(MSG)	print_and_abort((MSG), __FILE__,__LINE__)
+
 int print_and_abort(const char *, const char *, int);
 
 #ifdef __cplusplus

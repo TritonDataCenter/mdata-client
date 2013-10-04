@@ -117,8 +117,7 @@ process_input(mdata_proto_t *mdp, string_t *input)
 		break;
 
 	default:
-		fprintf(stderr, "process_input: UNKNOWN STATE\n");
-		abort();
+		ABORT("process_input: UNKNOWN STATE\n");
 	}
 }
 
@@ -227,10 +226,8 @@ proto_execute(mdata_proto_t *mdp, const char *command, const char *argument,
 			}
 		}
 
-		if (mdp->mdp_state != MDPS_READY) {
-			fprintf(stderr, "proto state not MDPS_READY\n");
-			abort();
-		}
+		if (mdp->mdp_state != MDPS_READY)
+			ABORT("proto state not MDPS_READY\n");
 
 		/*
 		 * We were able to send a command and receive a response.
