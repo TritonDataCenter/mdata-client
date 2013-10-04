@@ -76,7 +76,7 @@ get_product_string(void)
 }
 
 static int
-find_md_ngz(const char **out)
+find_md_ngz(const char **out, int *permfail)
 {
 	int i;
 	struct stat st;
@@ -90,6 +90,15 @@ find_md_ngz(const char **out)
 		    S_ISSOCK(st.st_mode)) {
 			*out = zone_md_socket_paths[i];
 			return (0);
+		} else {
+			/*
+			 * If we're not root, and we get an EACCES, it's
+			 * often a permissions problem.  Don't retry
+			 * forever:
+			 */
+			if (geteuid() != 0 && (errno == EPERM ||
+			    errno == EACCES))
+				*permfail = 1;
 		}
 	}
 
@@ -113,7 +122,7 @@ open_md_ngz(int *outfd, char **errmsg, int *permfail)
 	 * socket might not exist yet.  Keep trying and wait for it to
 	 * appear.
 	 */
-	if (find_md_ngz(&sockpath) == -1) {
+	if (find_md_ngz(&sockpath, permfail) == -1) {
 		*errmsg = "Could not find metadata socket.";
 		return (-1);
 	}
