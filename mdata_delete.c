@@ -31,21 +31,15 @@ static char *keyname;
 static int
 print_response(mdata_response_t mdr, string_t *data)
 {
-	const char *cstr = dynstr_cstr(data);
-	size_t len = dynstr_len(data);
-
 	switch (mdr) {
 	case MDR_SUCCESS:
-		fprintf(stdout, "%s", cstr);
-		if (len < 1 || cstr[len - 1] != '\n')
-			fprintf(stdout, "\n");
 		return (MDEC_SUCCESS);
 	case MDR_NOTFOUND:
 		fprintf(stderr, "No metadata for '%s'\n", keyname);
 		return (MDEC_NOTFOUND);
 	case MDR_UNKNOWN:
-		fprintf(stderr, "Error getting metadata for key '%s': %s\n",
-		    keyname, cstr);
+		fprintf(stderr, "Error deleting metadata key '%s': %s\n",
+		    keyname, dynstr_cstr(data));
 		return (MDEC_ERROR);
 	default:
 		ABORT("print_response: UNKNOWN RESPONSE\n");
@@ -71,9 +65,14 @@ main(int argc, char **argv)
 		return (MDEC_ERROR);
 	}
 
+	if (proto_version(mdp) < 2) {
+		fprintf(stderr, "ERROR: host does not support DELETE\n");
+		return (MDEC_ERROR);
+	}
+
 	keyname = strdup(argv[1]);
 
-	if (proto_execute(mdp, "GET", keyname, &mdr, &data) != 0) {
+	if (proto_execute(mdp, "DELETE", keyname, &mdr, &data) != 0) {
 		fprintf(stderr, "ERROR: could not execute GET\n");
 		return (MDEC_ERROR);
 	}

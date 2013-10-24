@@ -13,6 +13,8 @@ extern "C" {
 
 typedef struct mdata_plat mdata_plat_t;
 
+int plat_is_interactive(void);
+
 /*int open_metadata_stream(FILE **fp, char **err);*/
 int plat_init(mdata_plat_t **, char **er, int *);
 int plat_recv(mdata_plat_t *, string_t *, int);

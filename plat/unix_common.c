@@ -19,6 +19,12 @@
 #include "plat.h"
 #include "dynstr.h"
 
+int
+unix_is_interactive(void)
+{
+	return (isatty(STDIN_FILENO) == 1);
+}
+
 static int
 unix_raw_mode(int fd, char **errmsg)
 {
