@@ -190,7 +190,9 @@ plat_recv(mdata_plat_t *mpl, string_t *data, int timeout_ms)
 	for (;;) {
 		if (port_associate(mpl->mpl_port, PORT_SOURCE_FD, mpl->mpl_conn,
 		    POLLIN | POLLERR | POLLHUP , NULL) != 0) {
-			err(1, "PORT_ASSOCIATE ERROR");
+			fprintf(stderr, "port_associate error: %s\n",
+			    strerror(errno));
+			return (-1);
 		}
 
 		tv.tv_sec = timeout_ms / 1000;
@@ -202,24 +204,22 @@ plat_recv(mdata_plat_t *mpl, string_t *data, int timeout_ms)
 				fprintf(stderr, "plat_recv timeout\n");
 				return (-1);
 			}
-			err(1, "PORT_GET ERROR");
+			fprintf(stderr, "port_get error: %s\n",
+			    strerror(errno));
+			return (-1);
 		}
 
 		if (pev.portev_events & POLLIN) {
 			char buf[2];
 			ssize_t sz;
 
-			sz = read(mpl->mpl_conn, buf, 1);
-			if (sz == 0) {
-				fprintf(stderr, "WHAT, NO DATA?!\n");
-				continue;
-			}
-
-			if (buf[0] == '\n') {
-				return (0);
-			} else {
-				buf[1] = '\0';
-				dynstr_append(data, buf);
+			if ((sz = read(mpl->mpl_conn, buf, 1)) > 0) {
+				if (buf[0] == '\n') {
+					return (0);
+				} else {
+					buf[1] = '\0';
+					dynstr_append(data, buf);
+				}
 			}
 		}
 		if (pev.portev_events & POLLERR) {
