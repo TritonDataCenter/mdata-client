@@ -29,16 +29,20 @@ typedef enum mdata_exit_codes {
 static int
 print_response(mdata_response_t mdr, string_t *data)
 {
+	const char *cstr = dynstr_cstr(data);
+	size_t len = dynstr_len(data);
+
 	switch (mdr) {
 	case MDR_SUCCESS:
-		fprintf(stdout, "%s\n", dynstr_cstr(data));
+		fprintf(stdout, "%s", cstr);
+		if (len >= 1 && cstr[len - 1] != '\n')
+			fprintf(stdout, "\n");
 		return (MDEC_SUCCESS);
 	case MDR_NOTFOUND:
 		fprintf(stderr, "No metadata\n");
 		return (MDEC_NOTFOUND);
 	case MDR_UNKNOWN:
-		fprintf(stderr, "Error getting metadata: %s\n",
-		    dynstr_cstr(data));
+		fprintf(stderr, "Error getting metadata: %s\n", cstr);
 		return (MDEC_ERROR);
 	default:
 		ABORT("print_response: UNKNOWN RESPONSE\n");
