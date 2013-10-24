@@ -39,6 +39,21 @@ dynstr_cstr(string_t *str)
 }
 
 void
+dynstr_appendc(string_t *str, char newc)
+{
+	int chunksz = STRING_CHUNK_SIZE;
+
+	if (str->str_strlen + 1 >= str->str_datalen) {
+		str->str_datalen += chunksz;
+		str->str_data = realloc(str->str_data, str->str_datalen);
+		if (str->str_data == NULL)
+			err(1, "could not allocate memory for string");
+	}
+	str->str_data[str->str_strlen++] = newc;
+	str->str_data[str->str_strlen] = '\0';
+}
+
+void
 dynstr_append(string_t *str, const char *news)
 {
 	int len = strlen(news);

@@ -17,6 +17,7 @@
 #include "dynstr.h"
 #include "plat.h"
 #include "proto.h"
+#include "base64.h"
 
 typedef enum mdata_exit_codes {
 	MDEC_SUCCESS = 0,
@@ -31,21 +32,15 @@ static char *keyname;
 static int
 print_response(mdata_response_t mdr, string_t *data)
 {
-	const char *cstr = dynstr_cstr(data);
-	size_t len = dynstr_len(data);
-
 	switch (mdr) {
 	case MDR_SUCCESS:
-		fprintf(stdout, "%s", cstr);
-		if (len < 1 || cstr[len - 1] != '\n')
-			fprintf(stdout, "\n");
 		return (MDEC_SUCCESS);
 	case MDR_NOTFOUND:
 		fprintf(stderr, "No metadata for '%s'\n", keyname);
 		return (MDEC_NOTFOUND);
 	case MDR_UNKNOWN:
-		fprintf(stderr, "Error getting metadata for key '%s': %s\n",
-		    keyname, cstr);
+		fprintf(stderr, "Error putting metadata for key '%s': %s\n",
+		    keyname, dynstr_cstr(data));
 		return (MDEC_ERROR);
 	default:
 		ABORT("print_response: UNKNOWN RESPONSE\n");
@@ -60,9 +55,11 @@ main(int argc, char **argv)
 	mdata_response_t mdr;
 	string_t *data;
 	char *errmsg = NULL;
+	string_t *req = dynstr_new();
 
 	if (argc < 2) {
-		errx(MDEC_USAGE_ERROR, "Usage: %s <keyname>", argv[0]);
+		errx(MDEC_USAGE_ERROR, "Usage: %s <keyname> [ <value> ]",
+		    argv[0]);
 	}
 
 	if (proto_init(&mdp, &errmsg) != 0) {
@@ -71,12 +68,53 @@ main(int argc, char **argv)
 		return (MDEC_ERROR);
 	}
 
+	if (proto_version(mdp) < 2) {
+		fprintf(stderr, "ERROR: host does not support PUT\n");
+		return (MDEC_ERROR);
+	}
+
 	keyname = strdup(argv[1]);
 
-	if (proto_execute(mdp, "GET", keyname, &mdr, &data) != 0) {
+	base64_encode(argv[1], strlen(argv[1]), req);
+	dynstr_appendc(req, ' ');
+	if (argc >= 3) {
+		/*
+		 * Use second argument as the value to put.
+		 */
+		base64_encode(argv[2], strlen(argv[2]), req);
+	} else {
+		int c;
+		string_t *stdinstr = dynstr_new();
+
+		dynstr_append(stdinstr, "");
+
+		if (plat_is_interactive()) {
+			fprintf(stderr, "ERROR: either specify the metadata "
+			    "value as the second command-line argument, or "
+			    "pipe content to stdin.\n");
+			return (MDEC_ERROR);
+		}
+
+		while ((c = fgetc(stdin)) != EOF) {
+			dynstr_appendc(stdinstr, (char) c);
+		}
+		if (ferror(stdin)) {
+			fprintf(stderr, "ERROR: could not read from stdin: "
+			    "%s\n", strerror(errno));
+			return (MDEC_ERROR);
+		}
+
+		base64_encode(dynstr_cstr(stdinstr), dynstr_len(stdinstr),
+		    req);
+		dynstr_free(stdinstr);
+	}
+
+	if (proto_execute(mdp, "PUT", dynstr_cstr(req), &mdr, &data) != 0) {
 		fprintf(stderr, "ERROR: could not execute GET\n");
 		return (MDEC_ERROR);
 	}
+
+	dynstr_free(req);
 
 	return (print_response(mdr, data));
 }

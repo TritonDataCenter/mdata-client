@@ -273,6 +273,12 @@ bail:
 }
 
 int
+plat_is_interactive(void)
+{
+	return (unix_is_interactive());
+}
+
+int
 plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
 {
 	char *product;

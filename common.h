@@ -9,6 +9,13 @@
 extern "C" {
 #endif
 
+#ifndef	__HAVE_BOOLEAN_T
+typedef enum {
+	B_FALSE = 0,
+	B_TRUE = 1
+} boolean_t;
+#endif	/* !__HAVE_BOOLEAN_T */
+
 #define	__UNUSED	__attribute__((unused))
 
 #define	VERIFY(EX)	((void)((EX) || print_and_abort("EX", __FILE__,__LINE__)))
