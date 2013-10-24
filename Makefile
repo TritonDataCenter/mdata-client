@@ -1,12 +1,16 @@
 
 CC = gcc
 
+CTFMERGE = /bin/true
+CTFCONVERT = /bin/true
+
 UNAME_S := $(shell uname -s)
 PLATFORM_OK = false
 
 CFILES = dynstr.c proto.c common.c base64.c crc32.c reqid.c
+OBJS = $(CFILES:%.c=%.o)
 HDRS = dynstr.h plat.h proto.h common.h base64.h crc32.h reqid.h
-CFLAGS = -I$(PWD) -Wall -Wextra -g -O0
+CFLAGS = -I$(PWD) -Wall -Wextra -Werror -g -O2
 LDLIBS =
 
 BINDIR = /usr/sbin
@@ -52,9 +56,13 @@ endif
 world:	all
 all:	$(PROGS)
 
-mdata-%:	$(CFILES) $(HDRS) mdata_%.c
-	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $(@:mdata-%=mdata_%).c $(CFILES)
+%.o:	%.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+	$(CTFCONVERT) -l mdata-client $@
 
+mdata-%:	$(OBJS) $(HDRS) mdata_%.o
+	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $(@:mdata-%=mdata_%).o $(OBJS)
+	$(CTFMERGE) -l mdata-client -o $@ $(OBJS) $(@:mdata-%=mdata_%).o
 
 #
 # Install Targets
@@ -82,7 +90,7 @@ manifest:
 
 .PHONY:	clean
 clean:
-	rm -f $(PROGS)
+	rm -f $(PROGS) $(OBJS)
 
 .PHONY:	clobber
 clobber:	clean
