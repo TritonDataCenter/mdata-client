@@ -14,6 +14,8 @@ CFLAGS = -I$(PWD) -Wall -Wextra -Werror -g -O2
 LDLIBS =
 
 BINDIR = /usr/sbin
+MANSECT = 1m
+MANDIR = /usr/share/man/man$(MANSECT)
 DESTDIR = $(PWD)/proto
 
 PROGS = \
@@ -25,6 +27,8 @@ PROGS = \
 PROTO_PROGS = \
 	$(PROGS:%=$(DESTDIR)$(BINDIR)/%)
 
+PROTO_MANPAGES = \
+	$(PROGS:%=$(DESTDIR)$(MANDIR)/%.$(MANSECT))
 
 #
 # Platform-specific definitions
@@ -42,6 +46,7 @@ ifeq ($(UNAME_S),Linux)
 CFILES += plat/linux.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
+MANSECT = 1
 endif
 
 ifeq ($(PLATFORM_OK),false)
@@ -69,10 +74,15 @@ mdata-%:	$(OBJS) $(HDRS) mdata_%.o
 #
 
 .PHONY:	install
-install:	$(PROTO_PROGS)
+install:	$(PROTO_PROGS) $(PROTO_MANPAGES)
 
 $(DESTDIR)$(BINDIR)/%: %
 	@mkdir -p $(DESTDIR)$(BINDIR)
+	cp $< $@
+	touch $@
+
+$(DESTDIR)$(MANDIR)/%.$(MANSECT): man/man1m/%.1m
+	@mkdir -p $(DESTDIR)$(MANDIR)
 	cp $< $@
 	touch $@
 
