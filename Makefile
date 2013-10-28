@@ -94,6 +94,10 @@ $(DESTDIR)$(MANDIR)/%.$(MANSECT): man/man1m/%.1m
 manifest:
 	cp manifest $(DESTDIR)/$(DESTNAME)
 
+.PHONY: update
+update:
+	git pull --rebase
+
 #
 # Cleanup Targets
 #
