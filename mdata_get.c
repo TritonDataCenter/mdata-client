@@ -47,6 +47,9 @@ print_response(mdata_response_t mdr, string_t *data)
 		fprintf(stderr, "Error getting metadata for key '%s': %s\n",
 		    keyname, cstr);
 		return (MDEC_ERROR);
+	case MDR_INVALID_COMMAND:
+		fprintf(stderr, "ERROR: host does not support GET\n");
+		return (MDEC_ERROR);
 	default:
 		ABORT("print_response: UNKNOWN RESPONSE\n");
 		return (MDEC_ERROR);

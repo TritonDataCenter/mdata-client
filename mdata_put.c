@@ -42,6 +42,9 @@ print_response(mdata_response_t mdr, string_t *data)
 		fprintf(stderr, "Error putting metadata for key '%s': %s\n",
 		    keyname, dynstr_cstr(data));
 		return (MDEC_ERROR);
+	case MDR_INVALID_COMMAND:
+		fprintf(stderr, "ERROR: host does not support PUT\n");
+		return (MDEC_ERROR);
 	default:
 		ABORT("print_response: UNKNOWN RESPONSE\n");
 		return (MDEC_ERROR);
