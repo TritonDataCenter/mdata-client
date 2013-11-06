@@ -285,7 +285,11 @@ plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
 	boolean_t smartdc_hvm_guest = B_FALSE;
 	mdata_plat_t *mpl = NULL;
 
-	mpl = calloc(1, sizeof (*mpl));
+	if ((mpl = calloc(1, sizeof (*mpl))) == NULL) {
+		*errmsg = "Could not allocate memory.";
+		*permfail = 1;
+		goto bail;
+	}
 	mpl->mpl_port = -1;
 	mpl->mpl_conn = -1;
 

@@ -228,7 +228,11 @@ plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
 	mdata_plat_t *mpl = NULL;
 	struct epoll_event event;
 
-	mpl = calloc(1, sizeof (*mpl));
+	if ((mpl = calloc(1, sizeof (*mpl))) == NULL) {
+		*errmsg = "Could not allocate memory.";
+		*permfail = 1;
+		goto bail;
+	}
 	mpl->mpl_epoll = -1;
 	mpl->mpl_conn = -1;
 
