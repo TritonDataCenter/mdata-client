@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2013, Joyent, Inc. All rights reserved.
+ * Copyright (c) 2013, Joyent, Inc.
+ * See LICENSE file for copyright and license details.
  *
  * Portions based on Public Domain work obtained from:
  *  https://shell.franken.de/svn/sky/xmlstorage/trunk/c++/xmlrpc/base64.cpp

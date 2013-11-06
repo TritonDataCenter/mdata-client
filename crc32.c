@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 1986 Gary S. Brown.
- * Copyright (c) 2013, Joyent, Inc. All rights reserved.
+ * Copyright (c) 2013, Joyent, Inc.
+ * See LICENSE file for copyright and license details.
  */
 
 #include <stdio.h>
@@ -9,51 +9,10 @@
 
 #include "dynstr.h"
 
-/* First, the polynomial itself and its table of feedback terms.  The
- * polynomial is
- * X^32+X^26+X^23+X^22+X^16+X^12+X^11+X^10+X^8+X^7+X^5+X^4+X^2+X^1+X^0
- * Note that we take it "backwards" and put the highest-order term in
- * the lowest-order bit.  The X^32 term is "implied"; the LSB is the
- * X^31 term, etc.  The X^0 term (usually shown as "+1") results in
- * the MSB being 1.
- *
- * Note that the usual hardware shift register implementation, which
- * is what we're using (we're merely optimizing it by doing eight-bit
- * chunks at a time) shifts bits into the lowest-order term.  In our
- * implementation, that means shifting towards the right.  Why do we
- * do it this way?  Because the calculated CRC must be transmitted in
- * order from highest-order term to lowest-order term.  UARTs transmit
- * characters in order from LSB to MSB.  By storing the CRC this way,
- * we hand it to the UART in the order low-byte to high-byte; the UART
- * sends each low-bit to hight-bit; and the result is transmission bit
- * by bit from highest- to lowest-order term without requiring any bit
- * shuffling on our part.  Reception works similarly.
- *
- * The feedback terms table consists of 256, 32-bit entries.  Notes:
- *
- *  1. The table can be generated at runtime if desired; code to do so
- *     is shown later.  It might not be obvious, but the feedback
- *     terms simply represent the results of eight shift/xor opera-
- *     tions for all combinations of data and CRC register values.
- *
- *  2. The CRC accumulation logic is the same for all CRC polynomials,
- *     be they sixteen or thirty-two bits wide.  You simply choose the
- *     appropriate table.  Alternatively, because the table can be
- *     generated at runtime, you can start by generating the table for
- *     the polynomial in question and use exactly the same "updcrc",
- *     if your application needn't simultaneously handle two CRC
- *     polynomials.  (Note, however, that XMODEM is strange.)
- *
- *  3. For 16-bit CRCs, the table entries need be only 16 bits wide;
- *     of course, 32-bit entries work OK if the high 16 bits are zero.
- *
- *  4. The values must be right-shifted by eight bits by the "updcrc"
- *     logic; the shift must be unsigned (bring in zeroes).  On some
- *     hardware you could probably optimize the shift in assembler by
- *     using byte-swap instructions.
+/*
+ * Pre-generated CRC32 Table from Polynomial 0xEDB88320:
  */
-
-static uint32_t crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
+static uint32_t crc32_table[] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
     0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
     0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2,
@@ -99,21 +58,17 @@ static uint32_t crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-static uint32_t
-update_crc32(uint8_t inbyte, uint32_t crc)
-{
-	return (crc_32_tab[(crc ^ inbyte) & 0xff] ^ ((crc) >> 8));
-}
-
 uint32_t
 crc32_calc(const char *cstr, size_t len)
 {
-	uint32_t oldcrc32 = 0xffffffff;
+	uint32_t crc = 0xffffffff;
 	unsigned int i;
 
 	for (i = 0; i < len; i++) {
-		oldcrc32 = update_crc32((uint8_t) cstr[i], oldcrc32);
+		uint8_t b = (uint8_t) cstr[i];
+
+		crc = crc32_table[(crc ^ b) & 0xff] ^ ((crc) >> 8);
 	}
 
-	return (~oldcrc32);
+	return (~crc);
 }
