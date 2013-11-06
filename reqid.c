@@ -13,6 +13,7 @@
 #include <sys/uio.h>
 #include <time.h>
 
+#include "common.h"
 #include "reqid.h"
 
 static int urandom_fd = -1;
@@ -23,6 +24,8 @@ reqid(char *buf)
 	int i;
 	static int seed = -1;
 	uint32_t tmp = 0;
+
+	VERIFY(buf != NULL);
 
 	/*
 	 * If we were able to open it, try and read a random request ID
@@ -46,8 +49,6 @@ reqid(char *buf)
 	}
 
 out:
-	if (buf == NULL)
-		buf = malloc(REQID_LEN);
 	sprintf(buf, "%08x", tmp);
 	return (buf);
 }
