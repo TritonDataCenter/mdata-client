@@ -1,9 +1,14 @@
 
+VERSION = 0.0.1
+
 CC = gcc
 
 CTFMERGE = /bin/true
 CTFCONVERT = /bin/true
 
+GNUTAR = tar
+
+PWD := $(shell pwd)
 UNAME_S := $(shell uname -s)
 PLATFORM_OK = false
 
@@ -30,6 +35,10 @@ PROTO_PROGS = \
 PROTO_MANPAGES = \
 	$(PROGS:%=$(DESTDIR)$(MANDIR)/%.$(MANSECT))
 
+INSTALL_TARGETS = \
+	$(PROTO_PROGS) \
+	$(PROTO_MANPAGES)
+
 #
 # Platform-specific definitions
 #
@@ -40,6 +49,7 @@ CFILES += plat/sunos.c plat/unix_common.c
 HDRS += plat/unix_common.h
 LDLIBS += -lnsl -lsocket -lsmbios
 PLATFORM_OK = true
+GNUTAR = gtar
 endif
 
 ifeq ($(UNAME_S),Linux)
@@ -47,6 +57,8 @@ CFILES += plat/linux.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
 MANSECT = 1
+INSTALL_TARGETS += $(DESTDIR)/lib/smartdc/mdata-get
+PKGNAME = joyent-mdata-client
 endif
 
 ifeq ($(PLATFORM_OK),false)
@@ -74,7 +86,7 @@ mdata-%:	$(OBJS) $(HDRS) mdata_%.o
 #
 
 .PHONY:	install
-install:	$(PROTO_PROGS) $(PROTO_MANPAGES)
+install:	$(INSTALL_TARGETS)
 
 $(DESTDIR)$(BINDIR)/%: %
 	@mkdir -p $(DESTDIR)$(BINDIR)
@@ -83,8 +95,12 @@ $(DESTDIR)$(BINDIR)/%: %
 
 $(DESTDIR)$(MANDIR)/%.$(MANSECT): man/man1m/%.1m
 	@mkdir -p $(DESTDIR)$(MANDIR)
-	cp $< $@
-	touch $@
+	sed 's/__SECT__/$(MANSECT)/g' < $< > $@
+
+$(DESTDIR)/lib/smartdc/mdata-%:
+	@mkdir -p $$(dirname $@)
+	@rm -f $@
+	ln -s $(BINDIR)/$$(basename $@) $@
 
 #
 # SmartOS (smartos-live) Package Manifest Targets
@@ -97,6 +113,30 @@ manifest:
 .PHONY: update
 update:
 	git pull --rebase
+
+#
+# Debian Package Targets
+#
+#
+
+.PHONY: package-debian
+package-debian:
+	debuild -us -uc
+
+source-tarball:
+	if [ -z $(RELEASE_DIRECTORY) ]; then \
+		echo "error: define RELEASE_DIRECTORY" >&2; \
+		exit 1; \
+	fi
+	if [ -z $(PKGNAME) ]; then \
+		echo "error: define PKGNAME" >&2; \
+		exit 1; \
+	fi
+	$(GNUTAR) \
+		-zc -f $(RELEASE_DIRECTORY)/$(PKGNAME)_$(VERSION).orig.tar.gz \
+		--exclude=.git \
+		--transform 's,^,$(PKGNAME)_$(VERSION)/,' \
+		*
 
 #
 # Cleanup Targets

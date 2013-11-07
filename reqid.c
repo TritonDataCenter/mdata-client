@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2013, Joyent, Inc.
+ * See LICENSE file for copyright and license details.
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
