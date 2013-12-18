@@ -22,7 +22,16 @@
 #include "crc32.h"
 #include "base64.h"
 
-#define	RECV_TIMEOUT_MS	6000
+/*
+ * Receive timeout used prior to V2 negotiation:
+ */
+#define	RECV_TIMEOUT_MS		6000
+/*
+ * Receive timeout once we've successfully negotiated the V2 protocol with the
+ * host.  Some V2 operations, like PUT, can take longer than 6 seconds to
+ * complete.
+ */
+#define	RECV_TIMEOUT_MS_V2	45000
 
 typedef enum mdata_proto_state {
 	MDPS_MESSAGE_HEADER = 1,
@@ -367,7 +376,10 @@ proto_recv(mdata_proto_t *mdp)
 	string_t *line = dynstr_new();
 
 	for (;;) {
-		if (plat_recv(mdp->mdp_plat, line, RECV_TIMEOUT_MS) == -1) {
+		int recv_timeout_ms = mdp->mdp_version == MDPV_VERSION_2 ?
+		    RECV_TIMEOUT_MS_V2 : RECV_TIMEOUT_MS;
+
+		if (plat_recv(mdp->mdp_plat, line, recv_timeout_ms) == -1) {
 			mdp->mdp_state = MDPS_ERROR;
 			goto bail;
 		}
