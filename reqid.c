@@ -68,6 +68,6 @@ reqid_fini(void)
 	if (urandom_fd == -1)
 		return;
 
-	urandom_fd = -1;
 	(void) close(urandom_fd);
+	urandom_fd = -1;
 }
