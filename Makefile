@@ -62,14 +62,16 @@ PKGNAME = joyent-mdata-client
 endif
 
 ifeq ($(UNAME_S),FreeBSD)
-CC = gcc47
+CC = cc
 
 CTFMERGE = /usr/bin/true
 CTFCONVERT = /usr/bin/true
 
+CFLAGS += -Wno-typedef-redefinition
 CFILES += plat/freebsd.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
+MANSECT = 1
 endif
 
 ifeq ($(PLATFORM_OK),false)
