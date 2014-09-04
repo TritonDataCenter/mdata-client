@@ -1,20 +1,20 @@
 # mdata-client
 
 This repository contains metadata retrieval and manipulation tools for use
-within guests of the SmartOS (and SDC) hypervisor.  These guests may be either
-SmartOS Zones or KVM virtual machines.
+within guests of the SmartOS (and SmartDataCenter) hypervisor.  These guests may be either
+SmartOS Zones or KVM instances.
 
 # Commands
 
 There are four commands provided in this consolidation:
 
-* [mdata-list(1M)][mdata_list]; list custom metadata keys in the metadata store
-* [mdata-get(1M)][mdata_get]; get the value of a particular metadata key
-* [mdata-put(1M)][mdata_put]; set the value of a particular metadata key
-* [mdata-delete(1M)][mdata_delete]; remove a metadata key
+* [mdata-list(1M)][mdata_list]: list custom metadata keys in the metadata store.
+* [mdata-get(1M)][mdata_get]: get the value of a particular metadata key.
+* [mdata-put(1M)][mdata_put]: set the value of a particular metadata key.
+* [mdata-delete(1M)][mdata_delete]: remove a metadata key.
 
 Manual pages for these tools are available in this repository, and are
-generally shipped with the OS (in the case of SmartOS) or in the package (e.g.
+shipped with SmartOS or in the package (e.g.
 [for Ubuntu][launchpad_pkg]).  They are also viewable on the web at the links
 above.
 
@@ -26,10 +26,10 @@ this repository are clients that communicate using this protocol.  The SmartOS
 base metadata keys for guests to consume, as well as the ability to support
 arbitrary additional user-provided metadata.
 
-In a SmartOS container/zone guest, a UNIX domain socket is used to communicate
-with the metadata server running in the hypervisor.  In a KVM guest, such as a
+In a SmartOS guest, a UNIX domain socket is used to communicate with the 
+metadata server running in the hypervisor.  In a KVM guest, such as a
 Linux virtual machine, the client tools will make use of the second serial port
-(e.g.  `ttyb`, or `COM2`) to communicate with the hypervisor.
+(e.g.  `ttyb` or `COM2`) to communicate with the hypervisor.
 
 # OS Support
 
