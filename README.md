@@ -4,6 +4,10 @@ This repository contains metadata retrieval and manipulation tools for use
 within guests of the SmartOS (and SDC) hypervisor.  These guests may be either
 SmartOS Zones or KVM virtual machines.
 
+This repository is part of the Joyent SmartDataCenter project (SDC).  For
+contribution guidelines, issues, and general documentation, visit the main
+[SDC](http://github.com/joyent/sdc) project page.
+
 # Commands
 
 There are four commands provided in this consolidation:
