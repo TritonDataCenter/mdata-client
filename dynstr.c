@@ -9,11 +9,11 @@
 
 #include "dynstr.h"
 
-typedef struct string {
+struct string {
 	size_t str_strlen;
 	size_t str_datalen;
 	char *str_data;
-} string_t;
+};
 
 #define	STRING_CHUNK_SIZE	64
 

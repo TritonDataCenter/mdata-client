@@ -27,10 +27,10 @@
 
 #define	SERIAL_DEVICE	"/dev/ttyS1"
 
-typedef struct mdata_plat {
+struct mdata_plat {
 	int mpl_epoll;
 	int mpl_conn;
-} mdata_plat_t;
+};
 
 
 int

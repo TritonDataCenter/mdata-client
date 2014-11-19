@@ -34,10 +34,10 @@ static char *zone_md_socket_paths[] = {
 	NULL
 };
 
-typedef struct mdata_plat {
+struct mdata_plat {
 	int mpl_port;
 	int mpl_conn;
-} mdata_plat_t;
+};
 
 static int
 find_product(smbios_hdl_t *shp, const smbios_struct_t *sp, void *arg)

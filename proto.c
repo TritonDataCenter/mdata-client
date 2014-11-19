@@ -54,7 +54,7 @@ typedef struct mdata_command {
 	int mdc_done;
 } mdata_command_t;
 
-typedef struct mdata_proto {
+struct mdata_proto {
 	mdata_plat_t *mdp_plat;
 	mdata_command_t *mdp_command;
 	mdata_proto_state_t mdp_state;
@@ -62,7 +62,7 @@ typedef struct mdata_proto {
 	boolean_t mdp_in_reset;
 	char *mdp_errmsg;
 	char *mdp_parse_errmsg;
-} mdata_proto_t;
+};
 
 static int proto_send(mdata_proto_t *mdp);
 static int proto_recv(mdata_proto_t *mdp);
