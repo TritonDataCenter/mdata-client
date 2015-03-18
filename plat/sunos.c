@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
+ * Copyright (c) 2015, Joyent, Inc.
  * See LICENSE file for copyright and license details.
  */
 
@@ -30,6 +30,7 @@
 
 static char *zone_md_socket_paths[] = {
 	"/.zonecontrol/metadata.sock",		/* SDC7 */
+	"/native/.zonecontrol/metadata.sock",	/* SDC7+LX */
 	"/var/run/smartdc/metadata.sock",	/* SDC6 */
 	NULL
 };
