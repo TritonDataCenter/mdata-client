@@ -123,6 +123,9 @@ $(DESTDIR)/lib/smartdc/mdata-%:
 manifest:
 	cp manifest $(DESTDIR)/$(DESTNAME)
 
+.PHONY: mancheck_conf
+mancheck_conf:
+
 .PHONY: update
 update:
 	git pull --rebase
