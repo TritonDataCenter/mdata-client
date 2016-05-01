@@ -25,7 +25,11 @@
 #include "dynstr.h"
 #include "plat/unix_common.h"
 
+#ifdef __NetBSD__
+#define	SERIAL_DEVICE	"/dev/tty01"
+#else
 #define	SERIAL_DEVICE	"/dev/cuau1"
+#endif
 
 typedef struct mdata_plat {
 	int mpl_kq;
