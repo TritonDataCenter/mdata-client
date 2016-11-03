@@ -80,7 +80,7 @@ CC != if [ -x /usr/bin/clang ]; then echo /usr/bin/clang; else echo /usr/bin/gcc
 CTFMERGE != if [ -x /usr/bin/ctfmerge ]; then echo /usr/bin/ctfmerge; else echo /usr/bin/true; fi
 CTFCONVERT != if [ -x /usr/bin/ctfconvert ]; then echo /usr/bin/ctfconvert; else echo /usr/bin/true; fi
 
-CFILES += plat/freebsd.c plat/unix_common.c
+CFILES += plat/bsd.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
 MANSECT = 1
