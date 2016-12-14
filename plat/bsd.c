@@ -25,8 +25,10 @@
 #include "dynstr.h"
 #include "plat/unix_common.h"
 
-#ifdef __NetBSD__
+#if defined(__NetBSD__)
 #define	SERIAL_DEVICE	"/dev/tty01"
+#elif defined(__OpenBSD__)
+#define	SERIAL_DEVICE	"/dev/cua01"
 #else
 #define	SERIAL_DEVICE	"/dev/cuau1"
 #endif
