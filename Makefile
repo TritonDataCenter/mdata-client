@@ -74,6 +74,18 @@ PLATFORM_OK = true
 MANSECT = 1
 endif
 
+ifeq ($(UNAME_S),OpenBSD)
+CC = cc
+
+CTFMERGE = /usr/bin/true
+CTFCONVERT = /usr/bin/true
+
+CFILES += plat/openbsd.c plat/unix_common.c
+HDRS += plat/unix_common.h
+PLATFORM_OK = true
+MANSECT = 1
+endif
+
 ifeq ($(PLATFORM_OK),false)
 $(error Unknown platform: $(UNAME_S))
 endif
