@@ -13,8 +13,7 @@ extern "C" {
 #include "plat.h"
 #include "dynstr.h"
 
-/*int unix_raw_mode(int fd, char **errmsg);*/
-int unix_open_serial(char *devpath, int *outfd, char **errmsg, int *permfail);
+int unix_open_serial(const char *devpath, int *outfd, const char **errmsg, int *permfail);
 int unix_send_reset(mdata_plat_t *mpl);
 int unix_is_interactive(void);
 

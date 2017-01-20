@@ -60,7 +60,7 @@ main(int argc __UNUSED, char **argv __UNUSED)
 	mdata_proto_t *mdp;
 	mdata_response_t mdr;
 	string_t *data;
-	char *errmsg = NULL;
+	const char *errmsg = NULL;
 
 	if (proto_init(&mdp, &errmsg) != 0) {
 		fprintf(stderr, "ERROR: could not initialise protocol: %s\n",
