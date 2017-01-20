@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "common.h"
+
 int
 print_and_abort(const char *message, const char *file, int line)
 {
