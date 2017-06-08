@@ -61,6 +61,10 @@ INSTALL_TARGETS += $(DESTDIR)/lib/smartdc/mdata-get
 PKGNAME = joyent-mdata-client
 endif
 
+ifeq ($(UNAME_S),Darwin)
+UNAME_S = FreeBSD
+endif
+
 ifeq ($(UNAME_S),FreeBSD)
 CC = cc
 
