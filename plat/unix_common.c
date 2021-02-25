@@ -39,6 +39,7 @@ unix_raw_mode(int fd, char **errmsg)
 	tios.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
 	tios.c_oflag &= ~(OPOST);
 	tios.c_cflag |= (CS8);
+	tios.c_cflag &= ~(HUPCL);
 	tios.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
 
 	/*
