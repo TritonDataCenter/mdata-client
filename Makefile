@@ -19,7 +19,7 @@ CFLAGS = -I$(PWD) -Wall -Wextra -Werror -g -O2
 LDLIBS =
 
 BINDIR = /usr/sbin
-MANSECT = 1m
+MANSECT = 8
 MANDIR = /usr/share/man/man$(MANSECT)
 DESTDIR = $(PWD)/proto
 
@@ -56,7 +56,6 @@ ifeq ($(UNAME_S),Linux)
 CFILES += plat/linux.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
-MANSECT = 1
 INSTALL_TARGETS += $(DESTDIR)/lib/smartdc/mdata-get
 PKGNAME = joyent-mdata-client
 endif
@@ -71,7 +70,6 @@ CFLAGS += -Wno-typedef-redefinition
 CFILES += plat/bsd.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
-MANSECT = 1
 endif
 
 ifeq ($(UNAME_S),NetBSD)
@@ -83,7 +81,6 @@ CTFCONVERT != if [ -x /usr/bin/ctfconvert ]; then echo /usr/bin/ctfconvert; else
 CFILES += plat/bsd.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
-MANSECT = 1
 endif
 
 ifeq ($(UNAME_S),OpenBSD)
@@ -95,7 +92,6 @@ CTFCONVERT = /usr/bin/true
 CFILES += plat/bsd.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
-MANSECT = 1
 endif
 
 ifeq ($(PLATFORM_OK),false)
@@ -130,7 +126,7 @@ $(DESTDIR)$(BINDIR)/%: %
 	cp $< $@
 	touch $@
 
-$(DESTDIR)$(MANDIR)/%.$(MANSECT): man/man1m/%.1m
+$(DESTDIR)$(MANDIR)/%.$(MANSECT): man/man8/%.8
 	@mkdir -p $(DESTDIR)$(MANDIR)
 	sed 's/__SECT__/$(MANSECT)/g' < $< > $@
 
