@@ -1,12 +1,13 @@
 # mdata-client
 
 This repository contains metadata retrieval and manipulation tools for use
-within guests of the SmartOS (and SDC) hypervisor.  These guests may be either
-SmartOS Zones or KVM virtual machines.
+within guests of the SmartOS hypervisor.  These guests may be either
+SmartOS Zones or BHYVE / KVM virtual machines.
 
-This repository is part of the Joyent SmartDataCenter project (SDC).  For
-contribution guidelines, issues, and general documentation, visit the main
-[SDC](http://github.com/joyent/sdc) project page.
+This repository is part of the TritonDataCenter project.  See the
+[contribution guidelines](https://github.com/TritonDataCenter/triton/blob/master/CONTRIBUTING.md)
+and general documentation at the main
+[Triton project](https://github.com/TritonDataCenter/triton) page.
 
 # Commands
 
@@ -45,11 +46,11 @@ is absolutely welcome.
 
 MIT (See _LICENSE_.)
 
-[mdata_docs]: http://eng.joyent.com/mdata/
-[protocol]: http://eng.joyent.com/mdata/protocol.html
-[datadict]: http://eng.joyent.com/mdata/datadict.html
-[mdata_get]: http://smartos.org/man/8/mdata-get
-[mdata_delete]: http://smartos.org/man/8/mdata-delete
-[mdata_put]: http://smartos.org/man/8/mdata-put
-[mdata_list]: http://smartos.org/man/8/mdata-list
+[mdata_docs]: https://eng.tritondatacenter.com/mdata/
+[protocol]: https://eng.tritondatacenter.com/mdata/protocol.html
+[datadict]: https://eng.tritondatacenter.com/mdata/datadict.html
+[mdata_get]: https://smartos.org/man/8/mdata-get
+[mdata_delete]: https://smartos.org/man/8/mdata-delete
+[mdata_put]: https://smartos.org/man/8/mdata-put
+[mdata_list]: https://smartos.org/man/8/mdata-list
 [launchpad_pkg]: https://launchpad.net/ubuntu/+source/joyent-mdata-client

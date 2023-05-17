@@ -57,7 +57,7 @@ CFILES += plat/linux.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
 INSTALL_TARGETS += $(DESTDIR)/lib/smartdc/mdata-get
-PKGNAME = joyent-mdata-client
+PKGNAME = triton-mdata-client
 endif
 
 ifeq ($(UNAME_S),FreeBSD)
