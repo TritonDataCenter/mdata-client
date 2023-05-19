@@ -25,9 +25,9 @@ above.
 
 # Protocol and Transport
 
-The Joyent Metadata Protocol [is documented online][protocol].  The programs in
+The Triton SmartOS Metadata Protocol [is documented online][protocol].  The programs in
 this repository are clients that communicate using this protocol.  The SmartOS
-(or SmartDataCenter) hypervisor provides a [common set][datadict] of supported
+(or TritonDataCenter) hypervisor provides a [common set][datadict] of supported
 base metadata keys for guests to consume, as well as the ability to support
 arbitrary additional user-provided metadata.
 
