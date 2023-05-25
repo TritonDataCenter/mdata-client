@@ -1,6 +1,11 @@
 triton-mdata-client (0.0.2-1) unstable; urgency=medium
 
-  * Initial packaging for Joyent repository.
   * Renamed package to triton-mdata-client.
 
  -- Triton Developers <triton-devs@mnx.io>  Thu, 11 May 2023 12:22:10 +0000
+
+joyent-mdata-client (0.0.1-1); urgency=low
+
+  * Initial packaging for Joyent repository.
+
+ -- Joshua M. Clulow <jmc@joyent.com>  Wed, 06 Nov 2013 16:54:10 -0800
