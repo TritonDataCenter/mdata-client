@@ -9,6 +9,7 @@ Homepage: https://github.com/TritonDataCenter/mdata-client
 Package: triton-mdata-client
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Replaces: joyent-mdata-client
 Provides: joyent-mdata-client
 Conflicts: joyent-mdata-client
 Description: Metadata client tools for use in guest virtual machines
