@@ -1,13 +1,16 @@
-Source: joyent-mdata-client
-Maintainer: Joshua M. Clulow <jmc@joyent.com>
+Source: triton-mdata-client
+Maintainer: Triton Developers <triton-devs@mnx.io>
 Section: misc
 Priority: optional
-Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 8)
+Standards-Version: 4.5.1
+Build-Depends: debhelper (>= 12)
+Homepage: https://github.com/TritonDataCenter/mdata-client
 
-Package: joyent-mdata-client
+Package: triton-mdata-client
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Homepage: https://github.com/joyent/mdata-client
+Replaces: joyent-mdata-client
+Provides: joyent-mdata-client
+Conflicts: joyent-mdata-client
 Description: Metadata client tools for use in guest virtual machines
  hosted on a SmartOS hypervisor.
