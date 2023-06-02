@@ -21,7 +21,7 @@ typedef enum mdata_response {
 
 typedef struct mdata_proto mdata_proto_t;
 
-int proto_init(mdata_proto_t **, char **);
+int proto_init(mdata_proto_t **, const char **);
 int proto_version(mdata_proto_t *);
 int proto_execute(mdata_proto_t *, const char *, const char *, mdata_response_t *,
     string_t **);

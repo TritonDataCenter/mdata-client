@@ -281,7 +281,7 @@ plat_is_interactive(void)
 }
 
 int
-plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
+plat_init(mdata_plat_t **mplout, const char **errmsg, int *permfail)
 {
 	char *product;
 	boolean_t smartdc_hvm_guest = B_FALSE;

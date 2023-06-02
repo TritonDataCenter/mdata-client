@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "crc32.h"
 #include "dynstr.h"
 
 /*

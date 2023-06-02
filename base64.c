@@ -6,17 +6,20 @@
  *  https://shell.franken.de/svn/sky/xmlstorage/trunk/c++/xmlrpc/base64.cpp
  */
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+
+#include "base64.h"
 #include "dynstr.h"
-#include "stdint.h"
 
 static const char base64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz0123456789+/";
 
 void
-base64_encode(uint8_t *input, size_t len, string_t *output)
+base64_encode(const char *input_, size_t len, string_t *output)
 {
+	const uint8_t *input = (const uint8_t *)input_;
 	char tmp[5];
 	unsigned int i = 0;
 

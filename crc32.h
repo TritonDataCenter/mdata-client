@@ -12,7 +12,7 @@ extern "C" {
 
 #include <stdint.h>
 
-uint32_t crc32_calc(const char *, int);
+uint32_t crc32_calc(const char *, size_t);
 
 #ifdef __cplusplus
 }

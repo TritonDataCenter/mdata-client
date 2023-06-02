@@ -63,7 +63,7 @@ main(int argc, char **argv)
 	mdata_proto_t *mdp;
 	mdata_response_t mdr;
 	string_t *data;
-	char *errmsg = NULL;
+	const char *errmsg = NULL;
 
 	if (argc < 2) {
 		errx(MDEC_USAGE_ERROR, "Usage: %s <keyname>", argv[0]);
