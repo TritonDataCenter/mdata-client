@@ -94,6 +94,12 @@ HDRS += plat/unix_common.h
 PLATFORM_OK = true
 endif
 
+ifeq ($(UNAME_S),CYGWIN_NT-6.3)
+CFILES += plat/cygwin.c plat/unix_common.c
+HDRS += plat/unix_common.h
+PLATFORM_OK = true
+endif
+
 ifeq ($(PLATFORM_OK),false)
 $(error Unknown platform: $(UNAME_S))
 endif

@@ -32,17 +32,29 @@ base metadata keys for guests to consume, as well as the ability to support
 arbitrary additional user-provided metadata.
 
 In a SmartOS container/zone guest, a UNIX domain socket is used to communicate
-with the metadata server running in the hypervisor.  In a KVM guest, such as a
-Linux virtual machine, the client tools will make use of the second serial port
-(e.g.  `ttyb`, or `COM2`) to communicate with the hypervisor.
+with the metadata server running in the hypervisor.  In a bhyve or KVM guest,
+such as a Linux virtual machine, the client tools will make use of the second
+serial port (e.g.  `ttyb`, or `COM2`) to communicate with the hypervisor.
 
 # OS Support
 
-The tools currently build and function on SmartOS and various Linux
-distributions.  Support for other operating systems, such as \*BSD or Windows,
-is absolutely welcome.
+The tools currently build and function on SmartOS, some \*BSDs, various Linux
+distributions, and Windows (cygwin). Support for other operating systems is
+absolutely welcome.
 
-## License
+## Cygwin
+
+To build mdata executables on Cygwin, use the 64-bit Cygwin installer 2.893 or
+later available at https://cygwin.com/install.html. Building requires binutils,
+gcc-core and make, all under the Devel category. Invoke the Cygwin terminal,
+and run make on this repo.
+
+make will produce several exe files. These programs can be copied to and run on
+any version of Windows supported by Cygwin, so long as cygwin1.dll (found in
+C:\cygwin\bin of the development machine's Cygwin install) is copied into the
+same directory as the binaries.
+
+# License
 
 MIT (See _LICENSE_.)
 
