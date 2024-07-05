@@ -42,7 +42,7 @@ dynstr_cstr(string_t *str)
 void
 dynstr_appendc(string_t *str, char newc)
 {
-	int chunksz = STRING_CHUNK_SIZE;
+	size_t chunksz = STRING_CHUNK_SIZE;
 
 	if (str->str_strlen + 1 >= str->str_datalen) {
 		str->str_datalen += chunksz;
@@ -57,8 +57,8 @@ dynstr_appendc(string_t *str, char newc)
 void
 dynstr_append(string_t *str, const char *news)
 {
-	int len = strlen(news);
-	int chunksz = STRING_CHUNK_SIZE;
+	size_t len = strlen(news);
+	size_t chunksz = STRING_CHUNK_SIZE;
 
 	while (chunksz < len)
 		chunksz *= 2;
