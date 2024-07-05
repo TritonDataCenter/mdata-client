@@ -145,7 +145,7 @@ plat_is_interactive(void)
 }
 
 int
-plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
+plat_init(mdata_plat_t **mplout, const char **errmsg, int *permfail)
 {
 	mdata_plat_t *mpl = NULL;
 

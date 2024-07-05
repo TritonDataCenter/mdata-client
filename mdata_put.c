@@ -58,7 +58,7 @@ main(int argc, char **argv)
 	mdata_proto_t *mdp;
 	mdata_response_t mdr;
 	string_t *data;
-	char *errmsg = NULL;
+	const char *errmsg = NULL;
 	string_t *req = dynstr_new();
 
 	if (argc < 2) {

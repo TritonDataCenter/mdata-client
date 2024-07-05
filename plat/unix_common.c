@@ -27,7 +27,7 @@ unix_is_interactive(void)
 }
 
 static int
-unix_raw_mode(int fd, char **errmsg)
+unix_raw_mode(int fd, const char **errmsg)
 {
 	struct termios tios;
 
@@ -59,7 +59,7 @@ unix_raw_mode(int fd, char **errmsg)
 }
 
 int
-unix_open_serial(char *devpath, int *outfd, char **errmsg, int *permfail)
+unix_open_serial(const char *devpath, int *outfd, const char **errmsg, int *permfail)
 {
 	int fd;
 	char scrap[100];

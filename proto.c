@@ -60,8 +60,8 @@ struct mdata_proto {
 	mdata_proto_state_t mdp_state;
 	mdata_proto_version_t mdp_version;
 	boolean_t mdp_in_reset;
-	char *mdp_errmsg;
-	char *mdp_parse_errmsg;
+	const char *mdp_errmsg;
+	const char *mdp_parse_errmsg;
 };
 
 static int proto_send(mdata_proto_t *mdp);
@@ -153,6 +153,7 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
 	const char *endp = dynstr_cstr(input);
 	unsigned long clen;
 	uint32_t crc32;
+	char *endp2;
 
 	mdp->mdp_parse_errmsg = NULL;
 
@@ -165,10 +166,11 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
 	/*
 	 * Read Content Length:
 	 */
-	if ((clen = strtoul(endp, (char **) &endp, 10)) == 0) {
+	if ((clen = strtoul(endp, &endp2, 10)) == 0) {
 		mdp->mdp_parse_errmsg = "invalid content length";
 		return (-1);
 	}
+	endp = endp2;
 
 	/*
 	 * Skip whitespace:
@@ -179,10 +181,11 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
 	/*
 	 * Read CRC32 checksum:
 	 */
-	if ((crc32 = strtoul(endp, (char **) &endp, 16)) == 0) {
+	if ((crc32 = strtoul(endp, &endp2, 16)) == 0) {
 		mdp->mdp_parse_errmsg = "invalid crc32 in frame";
 		return (-1);
 	}
+	endp = endp2;
 
 	/*
 	 * Skip whitespace:
@@ -571,7 +574,7 @@ proto_version(mdata_proto_t *mdp)
 }
 
 int
-proto_init(mdata_proto_t **out, char **errmsg)
+proto_init(mdata_proto_t **out, const char **errmsg)
 {
 	mdata_proto_t *mdp;
 
