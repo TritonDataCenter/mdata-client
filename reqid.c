@@ -25,7 +25,7 @@ reqid(char *buf)
 {
 	int i;
 	static int seed = -1;
-	uint32_t tmp = 0;
+	int32_t tmp = 0;
 
 	VERIFY(buf != NULL);
 
@@ -43,7 +43,7 @@ reqid(char *buf)
 	 */
 	if (seed == -1) {
 		seed = (int) time(NULL);
-		srand(seed);
+		srand((unsigned int)seed);
 
 	}
 	for (i = 0; i < 4; i++) {

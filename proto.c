@@ -153,9 +153,8 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
     string_t *command, string_t *response_data)
 {
 	const char *endp = dynstr_cstr(input);
-	unsigned long clen;
-	uint32_t crc32;
 	char *endp2;
+	unsigned long clen, crc32;
 
 	mdp->mdp_parse_errmsg = NULL;
 
@@ -572,7 +571,7 @@ bail:
 int
 proto_version(mdata_proto_t *mdp)
 {
-	return (mdp->mdp_version);
+	return ((int)mdp->mdp_version);
 }
 
 int

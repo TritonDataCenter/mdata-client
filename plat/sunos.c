@@ -174,9 +174,9 @@ open_md_gz(int *outfd, char **errmsg, int *permfail)
 int
 plat_send(mdata_plat_t *mpl, string_t *data)
 {
-	int len = dynstr_len(data);
+	size_t len = dynstr_len(data);
 
-	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != len)
+	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != (ssize_t)len)
 		return (-1);
 
 	return (0);
