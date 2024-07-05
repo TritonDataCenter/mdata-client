@@ -1,15 +1,18 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  *
  * Portions based on Public Domain work obtained from:
  *  https://shell.franken.de/svn/sky/xmlstorage/trunk/c++/xmlrpc/base64.cpp
  */
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "dynstr.h"
-#include "stdint.h"
 
 static const char base64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz0123456789+/";

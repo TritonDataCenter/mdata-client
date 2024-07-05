@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <err.h>
-#include <string.h>
-#include <strings.h>
 #include <sys/types.h>
+#include <sys/epoll.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <sys/un.h>
 #include <err.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
 #include <termios.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-
-#include <sys/epoll.h>
+#include <unistd.h>
 
 #include "common.h"
-#include "plat.h"
 #include "dynstr.h"
+#include "plat.h"
 #include "plat/unix_common.h"
 
 #define	SERIAL_DEVICE	"/dev/ttyS1"

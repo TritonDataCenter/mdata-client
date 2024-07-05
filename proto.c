@@ -1,26 +1,28 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <err.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <unistd.h>
 
+#include "base64.h"
 #include "common.h"
+#include "crc32.h"
 #include "dynstr.h"
 #include "plat.h"
 #include "proto.h"
 #include "reqid.h"
-#include "crc32.h"
-#include "base64.h"
 
 /*
  * Receive timeout used prior to V2 negotiation:

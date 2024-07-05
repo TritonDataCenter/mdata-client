@@ -3,23 +3,22 @@
  * See LICENSE file for copyright and license details.
  */
 
-#include <stdlib.h>
-#include <err.h>
-#include <smbios.h>
-#include <string.h>
-#include <strings.h>
 #include <sys/types.h>
+#include <sys/filio.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <sys/un.h>
 #include <err.h>
 #include <errno.h>
-#include <termios.h>
-#include <zone.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/filio.h>
+#include <fcntl.h>
 #include <port.h>
+#include <smbios.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <termios.h>
+#include <unistd.h>
+#include <zone.h>
 
 #include "common.h"
 #include "dynstr.h"

@@ -1,10 +1,12 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
 #include <err.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "dynstr.h"
