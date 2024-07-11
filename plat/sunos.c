@@ -183,7 +183,7 @@ plat_send(mdata_plat_t *mpl, string_t *data)
 }
 
 int
-plat_recv(mdata_plat_t *mpl, string_t *data, int timeout_ms)
+plat_recv(mdata_plat_t *mpl, string_t *data, time_t timeout_ms)
 {
 	port_event_t pev;
 	timespec_t tv;
