@@ -190,7 +190,7 @@ plat_recv(mdata_plat_t *mpl, string_t *data, time_t timeout_ms)
 
 	for (;;) {
 		if (port_associate(mpl->mpl_port, PORT_SOURCE_FD,
-		    (uintptr_r)mpl->mpl_conn, POLLIN | POLLERR | POLLHUP,
+		    (uintptr_t)mpl->mpl_conn, POLLIN | POLLERR | POLLHUP,
 		    NULL) != 0) {
 			fprintf(stderr, "port_associate error: %s\n",
 			    strerror(errno));
