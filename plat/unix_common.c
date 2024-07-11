@@ -38,11 +38,11 @@ unix_raw_mode(int fd, const char **errmsg)
 		return (-1);
 	}
 
-	tios.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-	tios.c_oflag &= ~(OPOST);
-	tios.c_cflag |= (CS8);
-	tios.c_cflag &= ~(HUPCL);
-	tios.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+	tios.c_iflag &= (tcflag_t)~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
+	tios.c_oflag &= (tcflag_t)~(OPOST);
+	tios.c_cflag |= (tcflag_t)(CS8);
+	tios.c_cflag &= (tcflag_t)~(HUPCL);
+	tios.c_lflag &= (tcflag_t)~(ECHO | ICANON | IEXTEN | ISIG);
 
 	/*
 	 * As described in "Case C: MIN = 0, TIME > 0" of termio(7I), this
