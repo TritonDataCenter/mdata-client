@@ -27,7 +27,7 @@
 
 #define	IN_GLOBAL_DEVICE	"/dev/term/b"
 
-static char *zone_md_socket_paths[] = {
+static const char *zone_md_socket_paths[] = {
 	"/.zonecontrol/metadata.sock",		/* SDC7 */
 	"/native/.zonecontrol/metadata.sock",	/* SDC7+LX */
 	"/var/run/smartdc/metadata.sock",	/* SDC6 */
