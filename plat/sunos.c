@@ -107,7 +107,7 @@ find_md_ngz(const char **out, int *permfail)
 }
 
 static int
-open_md_ngz(int *outfd, char **errmsg, int *permfail)
+open_md_ngz(int *outfd, const char **errmsg, int *permfail)
 {
 	/*
 	 * We're in a non-global zone, so try and connect to the
@@ -161,7 +161,7 @@ open_md_ngz(int *outfd, char **errmsg, int *permfail)
 }
 
 static int
-open_md_gz(int *outfd, char **errmsg, int *permfail)
+open_md_gz(int *outfd, const char **errmsg, int *permfail)
 {
 	/*
 	 * We're in a global zone in a SmartOS KVM/QEMU instance, so
@@ -280,7 +280,7 @@ plat_is_interactive(void)
 }
 
 int
-plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
+plat_init(mdata_plat_t **mplout, const char **errmsg, int *permfail)
 {
 	char *product;
 	boolean_t smartdc_hvm_guest = B_FALSE;
