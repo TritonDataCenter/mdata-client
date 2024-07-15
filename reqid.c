@@ -1,17 +1,19 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
 #include <sys/types.h>
 #include <errno.h>
-#include <unistd.h>
 #include <fcntl.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/uio.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "common.h"
 #include "reqid.h"
@@ -23,7 +25,7 @@ reqid(char *buf)
 {
 	int i;
 	static int seed = -1;
-	uint32_t tmp = 0;
+	int32_t tmp = 0;
 
 	VERIFY(buf != NULL);
 
@@ -41,7 +43,7 @@ reqid(char *buf)
 	 */
 	if (seed == -1) {
 		seed = (int) time(NULL);
-		srand(seed);
+		srand((unsigned int)seed);
 
 	}
 	for (i = 0; i < 4; i++) {

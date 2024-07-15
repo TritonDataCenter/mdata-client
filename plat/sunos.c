@@ -3,23 +3,22 @@
  * See LICENSE file for copyright and license details.
  */
 
-#include <stdlib.h>
-#include <err.h>
-#include <smbios.h>
-#include <string.h>
-#include <strings.h>
 #include <sys/types.h>
+#include <sys/filio.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <sys/un.h>
 #include <err.h>
 #include <errno.h>
-#include <termios.h>
-#include <zone.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/filio.h>
+#include <fcntl.h>
 #include <port.h>
+#include <smbios.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <termios.h>
+#include <unistd.h>
+#include <zone.h>
 
 #include "common.h"
 #include "dynstr.h"
@@ -28,7 +27,7 @@
 
 #define	IN_GLOBAL_DEVICE	"/dev/term/b"
 
-static char *zone_md_socket_paths[] = {
+static const char *zone_md_socket_paths[] = {
 	"/.zonecontrol/metadata.sock",		/* SDC7 */
 	"/native/.zonecontrol/metadata.sock",	/* SDC7+LX */
 	"/var/run/smartdc/metadata.sock",	/* SDC6 */
@@ -108,7 +107,7 @@ find_md_ngz(const char **out, int *permfail)
 }
 
 static int
-open_md_ngz(int *outfd, char **errmsg, int *permfail)
+open_md_ngz(int *outfd, const char **errmsg, int *permfail)
 {
 	/*
 	 * We're in a non-global zone, so try and connect to the
@@ -162,7 +161,7 @@ open_md_ngz(int *outfd, char **errmsg, int *permfail)
 }
 
 static int
-open_md_gz(int *outfd, char **errmsg, int *permfail)
+open_md_gz(int *outfd, const char **errmsg, int *permfail)
 {
 	/*
 	 * We're in a global zone in a SmartOS KVM/QEMU instance, so
@@ -175,23 +174,24 @@ open_md_gz(int *outfd, char **errmsg, int *permfail)
 int
 plat_send(mdata_plat_t *mpl, string_t *data)
 {
-	int len = dynstr_len(data);
+	size_t len = dynstr_len(data);
 
-	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != len)
+	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != (ssize_t)len)
 		return (-1);
 
 	return (0);
 }
 
 int
-plat_recv(mdata_plat_t *mpl, string_t *data, int timeout_ms)
+plat_recv(mdata_plat_t *mpl, string_t *data, time_t timeout_ms)
 {
 	port_event_t pev;
 	timespec_t tv;
 
 	for (;;) {
-		if (port_associate(mpl->mpl_port, PORT_SOURCE_FD, mpl->mpl_conn,
-		    POLLIN | POLLERR | POLLHUP , NULL) != 0) {
+		if (port_associate(mpl->mpl_port, PORT_SOURCE_FD,
+		    (uintptr_t)mpl->mpl_conn, POLLIN | POLLERR | POLLHUP,
+		    NULL) != 0) {
 			fprintf(stderr, "port_associate error: %s\n",
 			    strerror(errno));
 			return (-1);
@@ -281,7 +281,7 @@ plat_is_interactive(void)
 }
 
 int
-plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
+plat_init(mdata_plat_t **mplout, const char **errmsg, int *permfail)
 {
 	char *product;
 	boolean_t smartdc_hvm_guest = B_FALSE;

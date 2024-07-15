@@ -1,26 +1,28 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <err.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <unistd.h>
 
+#include "base64.h"
 #include "common.h"
+#include "crc32.h"
 #include "dynstr.h"
 #include "plat.h"
 #include "proto.h"
 #include "reqid.h"
-#include "crc32.h"
-#include "base64.h"
 
 /*
  * Receive timeout used prior to V2 negotiation:
@@ -60,8 +62,8 @@ struct mdata_proto {
 	mdata_proto_state_t mdp_state;
 	mdata_proto_version_t mdp_version;
 	boolean_t mdp_in_reset;
-	char *mdp_errmsg;
-	char *mdp_parse_errmsg;
+	const char *mdp_errmsg;
+	const char *mdp_parse_errmsg;
 };
 
 static int proto_send(mdata_proto_t *mdp);
@@ -151,8 +153,8 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
     string_t *command, string_t *response_data)
 {
 	const char *endp = dynstr_cstr(input);
-	unsigned long clen;
-	uint32_t crc32;
+	char *endp2;
+	unsigned long clen, crc32;
 
 	mdp->mdp_parse_errmsg = NULL;
 
@@ -165,10 +167,11 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
 	/*
 	 * Read Content Length:
 	 */
-	if ((clen = strtoul(endp, (char **) &endp, 10)) == 0) {
+	if ((clen = strtoul(endp, &endp2, 10)) == 0) {
 		mdp->mdp_parse_errmsg = "invalid content length";
 		return (-1);
 	}
+	endp = endp2;
 
 	/*
 	 * Skip whitespace:
@@ -179,10 +182,11 @@ proto_parse_v2(mdata_proto_t *mdp, string_t *input, string_t *request_id,
 	/*
 	 * Read CRC32 checksum:
 	 */
-	if ((crc32 = strtoul(endp, (char **) &endp, 16)) == 0) {
+	if ((crc32 = strtoul(endp, &endp2, 16)) == 0) {
 		mdp->mdp_parse_errmsg = "invalid crc32 in frame";
 		return (-1);
 	}
+	endp = endp2;
 
 	/*
 	 * Skip whitespace:
@@ -567,11 +571,11 @@ bail:
 int
 proto_version(mdata_proto_t *mdp)
 {
-	return (mdp->mdp_version);
+	return ((int)mdp->mdp_version);
 }
 
 int
-proto_init(mdata_proto_t **out, char **errmsg)
+proto_init(mdata_proto_t **out, const char **errmsg)
 {
 	mdata_proto_t *mdp;
 

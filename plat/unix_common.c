@@ -1,24 +1,26 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <err.h>
-#include <string.h>
-#include <strings.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <err.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
 #include <termios.h>
+#include <unistd.h>
 
 #include "common.h"
-#include "plat.h"
 #include "dynstr.h"
+#include "plat.h"
+#include "unix_common.h"
 
 int
 unix_is_interactive(void)
@@ -27,7 +29,7 @@ unix_is_interactive(void)
 }
 
 static int
-unix_raw_mode(int fd, char **errmsg)
+unix_raw_mode(int fd, const char **errmsg)
 {
 	struct termios tios;
 
@@ -36,11 +38,11 @@ unix_raw_mode(int fd, char **errmsg)
 		return (-1);
 	}
 
-	tios.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-	tios.c_oflag &= ~(OPOST);
-	tios.c_cflag |= (CS8);
-	tios.c_cflag &= ~(HUPCL);
-	tios.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+	tios.c_iflag &= (tcflag_t)~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
+	tios.c_oflag &= (tcflag_t)~(OPOST);
+	tios.c_cflag |= (tcflag_t)(CS8);
+	tios.c_cflag &= (tcflag_t)~(HUPCL);
+	tios.c_lflag &= (tcflag_t)~(ECHO | ICANON | IEXTEN | ISIG);
 
 	/*
 	 * As described in "Case C: MIN = 0, TIME > 0" of termio(7I), this
@@ -59,7 +61,7 @@ unix_raw_mode(int fd, char **errmsg)
 }
 
 int
-unix_open_serial(char *devpath, int *outfd, char **errmsg, int *permfail)
+unix_open_serial(const char *devpath, int *outfd, const char **errmsg, int *permfail)
 {
 	int fd;
 	char scrap[100];

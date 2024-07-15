@@ -1,10 +1,14 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "common.h"
 
 int
 print_and_abort(const char *message, const char *file, int line)

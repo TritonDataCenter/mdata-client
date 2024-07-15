@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <err.h>
-#include <string.h>
-#include <strings.h>
 #include <sys/types.h>
+#include <sys/event.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <sys/un.h>
 #include <err.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
 #include <termios.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-
-#include <sys/event.h>
+#include <unistd.h>
 
 #include "common.h"
-#include "plat.h"
 #include "dynstr.h"
+#include "plat.h"
 #include "plat/unix_common.h"
 
 #if defined(__NetBSD__)
@@ -44,18 +44,18 @@ typedef struct mdata_plat {
 int
 plat_send(mdata_plat_t *mpl, string_t *data)
 {
-	int len = dynstr_len(data);
+	size_t len = dynstr_len(data);
 
-	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != len)
+	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != (ssize_t)len)
 		return (-1);
 
 	return (0);
 }
 
 int
-plat_recv(mdata_plat_t *mpl, string_t *data, int timeout_ms)
+plat_recv(mdata_plat_t *mpl, string_t *data, time_t timeout_ms)
 {
-	struct timespec timeout = { (time_t)(timeout_ms/1000), 0 };
+	struct timespec timeout = { (timeout_ms/1000), 0 };
 
 	for (;;) {
 		struct kevent mpl_ch;
@@ -145,7 +145,7 @@ plat_is_interactive(void)
 }
 
 int
-plat_init(mdata_plat_t **mplout, char **errmsg, int *permfail)
+plat_init(mdata_plat_t **mplout, const char **errmsg, int *permfail)
 {
 	mdata_plat_t *mpl = NULL;
 

@@ -1,10 +1,12 @@
 /*
- * Copyright (c) 2013, Joyent, Inc.
  * See LICENSE file for copyright and license details.
+ *
+ * Copyright (c) 2013 Joyent, Inc.
+ * Copyright (c) 2024 MNX Cloud, Inc.
  */
 
-#include <stdlib.h>
 #include <err.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "dynstr.h"
@@ -42,7 +44,7 @@ dynstr_cstr(string_t *str)
 void
 dynstr_appendc(string_t *str, char newc)
 {
-	int chunksz = STRING_CHUNK_SIZE;
+	size_t chunksz = STRING_CHUNK_SIZE;
 
 	if (str->str_strlen + 1 >= str->str_datalen) {
 		str->str_datalen += chunksz;
@@ -57,8 +59,8 @@ dynstr_appendc(string_t *str, char newc)
 void
 dynstr_append(string_t *str, const char *news)
 {
-	int len = strlen(news);
-	int chunksz = STRING_CHUNK_SIZE;
+	size_t len = strlen(news);
+	size_t chunksz = STRING_CHUNK_SIZE;
 
 	while (chunksz < len)
 		chunksz *= 2;
