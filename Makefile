@@ -15,7 +15,7 @@ PLATFORM_OK = false
 CFILES = dynstr.c proto.c common.c base64.c crc32.c reqid.c
 OBJS = $(CFILES:%.c=%.o)
 HDRS = dynstr.h plat.h proto.h common.h base64.h crc32.h reqid.h
-CFLAGS = -I$(PWD) -Wall -Wextra -Werror -g -O2
+CFLAGS := -I$(PWD) -Wall -Wextra -Werror -g -O2 $(CFLAGS)
 LDLIBS =
 
 BINDIR = /usr/sbin
