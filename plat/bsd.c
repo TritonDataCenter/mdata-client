@@ -45,9 +45,17 @@ int
 plat_send(mdata_plat_t *mpl, string_t *data)
 {
 	size_t len = dynstr_len(data);
+	ssize_t n, nwritten = 0;
 
-	if (write(mpl->mpl_conn, dynstr_cstr(data), len) != (ssize_t)len)
-		return (-1);
+	while (nwritten < (ssize_t)len) {
+		if ((n = write(mpl->mpl_conn, dynstr_cstr(data) + nwritten,
+		    len - nwritten)) < 0) {
+			if (errno == EAGAIN || errno == EINTR)
+				continue;
+			return (-1);
+		}
+		nwritten += n;
+	}
 
 	return (0);
 }
