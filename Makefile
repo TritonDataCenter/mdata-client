@@ -56,7 +56,7 @@ ifeq ($(UNAME_S),Linux)
 CFILES += plat/linux.c plat/unix_common.c
 HDRS += plat/unix_common.h
 PLATFORM_OK = true
-INSTALL_TARGETS += $(DESTDIR)/lib/smartdc/mdata-get
+INSTALL_TARGETS += $(DESTDIR)/usr/lib/smartdc/mdata-get
 PKGNAME = triton-mdata-client
 endif
 
@@ -130,7 +130,7 @@ $(DESTDIR)$(MANDIR)/%.$(MANSECT): man/man8/%.8
 	@mkdir -p $(DESTDIR)$(MANDIR)
 	sed 's/__SECT__/$(MANSECT)/g' < $< > $@
 
-$(DESTDIR)/lib/smartdc/mdata-%:
+$(DESTDIR)/usr/lib/smartdc/mdata-%:
 	@mkdir -p $$(dirname $@)
 	@rm -f $@
 	ln -s $(BINDIR)/$$(basename $@) $@
